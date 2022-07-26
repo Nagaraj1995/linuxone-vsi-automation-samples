@@ -1,11 +1,17 @@
 
----
 os_type: zlinux
 #os_type: zos
 
 # Name prefix for the created objects (VPC, subnetwork, VSI)
 name_prefix: "{{ os_type }}-ansible"
+# - VPC Details
 
+vpc:
+  id: "r022-e5ce554c-f04a-493d-afff-fa1f070f965e"
+subnet:
+  id: "02f7-ba0128d4-0cd7-4cb6-a121-acfc35fb809d"
+ssh_key:
+  id: "r022-5fe3e56d-3284-45d2-b416-ac163ea5b7b4"
 # - VSI name for the instance
 # - Profile name for the VSI
 # - Regular expression for the VSI image name
@@ -16,19 +22,22 @@ instance-zlinux:
   image: .*ubuntu-18-04.*s390x.*
 instance-zos:
   name: "zos-vsi"
-  profile: mz2-2x16
-  image: .*zos.*stock.*
+  profile: mz2o-2x16
+  resrcegrp: "800ed3637be643a1acee5bbdde257413"
+  image: .*zos-*
   username: IBMUSER
   python_interpreters:
   - /usr/lpp/IBM/cyp/v3r9/pyz/bin/python3
   - /usr/lpp/IBM/cyp/v3r8/pyz/bin/python3
 instance: "{{ lookup('vars','instance-' + os_type) }}"
-
+#instance: "instance-zos"
 # Name of the uploaded key
 # Please notice that the same key might not be uploaded twice
 # under different names
-ssh_key_name: "{{ ansible_user_id | lower }}"
-ssh_public_key: "{{lookup('file', '~/.ssh/id_rsa.pub') }}"
+ssh_key_name: "cloud-linux-vsi-key"
+ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCu1XUG8ZAn74eIkmd4DWOh5AxE7p65p/BF8WDB6z4AaumlVYRYafxVQBykznYMfM40oQKAFbyr7V2c5oh3r6KQ7ECss9rcbASIc1NH0tlOf5VWb6Xo3nrK+Fdt5BL8mKHZ/W+OY3WVtI/0jSB/z5mpSYb1cIHX3gXdXzRIgOJzEMTYvUzrAAbxPOcelP0i+suWW47lhZzNWYgaikk7B5bQvn4RMiiPDtc6QaWdYcEe9Fw6gad1FR1xkt3ZqM2j72S5ADJlZVVrnI5ZZyUM4GcSMgRakGqlfeLdJ+Iz6Odcn6gHSYUOw/ESF1yVmc+IPp6HiaxophDwZcl/oOC2yGPr root@vsam-virtualserver01.Shared.cloud"
+#ssh_key_name: "{{ ansible_user_id | lower }}"
+#ssh_public_key: "{{lookup('file', '~/.ssh/id_rsa.pub') }}"
 
 # Size of the created subnetwork
 total_ipv4_address_count: 256
@@ -39,7 +48,8 @@ region: "jp-tok"
 #region: "br-sao"
 
 #Zone within the region
-zone: "{{region}}-1"
+#zone: "{{region}}-2"
+zone: "jp-tok-2"
 
 # If cache_vsi=True then VSI creation will only be attempted if not cached
 #cache_vsi: True
