@@ -25,12 +25,26 @@
         cacheable: True
         fip: null
 
+    - name: Retrieve image list
+      when: image_dict is undefined
+      ibm_is_images_info:
+      register: images_list
+
+    - name: Set VM image name/id dictionary fact
+      when: image_dict is undefined
+      set_fact:
+        cacheable: True
+        image_dict: "{{ images_list.resource.images |
+                        items2dict(key_name='name', value_name='id') }}"
+
     - name: Remove VSI
       ibm_is_instance:
         state: absent
-        id: "{{ vsi.id }}"
+        id: "{{ VSI_ID }}"
+        # name: "{{ instance.name }}"
         vpc: "{{ vpc.id }}"
         profile: "{{ instance.profile }}"
+        resource_group: "{{ instance.resrcegrp }}"
         image: "{{ (image_dict|dict2items|selectattr('key', 'match', instance.image)|list|first).value }}"
         keys:
           - "{{ ssh_key.id }}"

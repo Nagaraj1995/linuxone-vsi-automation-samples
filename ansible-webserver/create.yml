@@ -95,7 +95,7 @@
       ibm_is_instance:
         name: "zos-vsi"
         state: available
-        #  id: "{{ vsi.id | default(omit) }}"
+        # id: "{{ vsi.id | default(omit) }}"
         vpc: "{{ vpc.id }}"
         profile: "mz2o-2x16"
         resource_group: "{{ instance.resrcegrp }}"
@@ -106,12 +106,17 @@
           - subnet: "{{ subnet.id }}"
         zone: "{{ zone }}"
       register: vsi_create_output
-
+ 
     - name: Save VSI as fact
       when: vsi_create_output.resource is defined
       set_fact:
         cacheable: True
         vsi: "{{ vsi_create_output.resource }}"
+
+    - name: Storing VSI ID
+      copy:
+        content: "{{ vsi.id }}"
+        dest: "/opt/local/scripts/file.txt"
 
     # - name: Configure Floating IP Address
       # when: (fip is undefined) or (fip == None) or (cache_vsi is false)

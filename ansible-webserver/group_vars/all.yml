@@ -13,6 +13,9 @@ subnet:
 ssh_key:
   id: "r022-5fe3e56d-3284-45d2-b416-ac163ea5b7b4"
 # - VSI name for the instance
+vsi:
+  id: "02f7_3a0f621f-827b-48d9-8e5e-5c5ed369ba94"
+#   id: "{{ VSI_ID }}"
 # - Profile name for the VSI
 # - Regular expression for the VSI image name
 #    Note: If multiple matches are found the first one is taken
@@ -21,7 +24,7 @@ instance-zlinux:
   profile: bz2-2x8
   image: .*ubuntu-18-04.*s390x.*
 instance-zos:
-  name: "zos-vsi"
+  name: zos-vsi
   profile: mz2o-2x16
   resrcegrp: "800ed3637be643a1acee5bbdde257413"
   image: .*zos-*
